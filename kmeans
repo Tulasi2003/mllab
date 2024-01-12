@@ -1,0 +1,68 @@
+import numpy as np
+
+def euclidean_distance(point1, point2):
+    return np.sqrt(np.sum((point1 - point2)**2))
+
+def k_means_clustering(X, k, initial_centers, max_iterations=100):
+    centers = np.array(initial_centers)
+    num_points, num_features = X.shape
+
+    for iteration in range(max_iterations):
+        # Assign each point to the nearest cluster
+        cluster_assignments = []
+        for i in range(num_points):
+            distances = [euclidean_distance(X[i], center) for center in centers]
+            closest_cluster = np.argmin(distances)
+            cluster_assignments.append(closest_cluster)
+
+        # Update the cluster centers
+        new_centers = []
+        for cluster in range(k):
+            cluster_points = X[np.array(cluster_assignments) == cluster]
+            if len(cluster_points) > 0:
+                new_center = np.mean(cluster_points, axis=0)
+                new_centers.append(new_center)
+            else:
+                new_centers.append(centers[cluster])
+
+        new_centers = np.array(new_centers)
+
+        # Check for convergence
+        if np.all(centers == new_centers):
+            break
+
+        centers = new_centers
+
+    return centers, iteration + 1
+
+# Given data and initial centers
+X = np.array([[5.9, 3.2],
+              [4.6, 2.9],
+              [6.2, 2.8],
+              [4.7, 3.2],
+              [5.5, 4.2],
+              [5.0, 3.0],
+              [4.9, 3.1],
+              [6.7, 3.1],
+              [5.1, 3.8],
+              [6.0, 3.0]])
+
+initial_centers = np.array([[6.2, 3.2],
+                            [6.6, 3.7],
+                            [6.5, 3.0]])
+
+# Run k-means clustering
+final_centers_1, iterations_1 = k_means_clustering(X, 3, initial_centers)
+
+# Center after 2 iterations
+_, iterations_2 = k_means_clustering(X, 3, initial_centers, max_iterations=2)
+final_centers_2, _ = k_means_clustering(X, 3, initial_centers, max_iterations=iterations_2)
+
+# Center when clustering converges
+final_centers_3, iterations_3 = k_means_clustering(X, 3, initial_centers)
+
+# Output results
+print("1. Center of the first iteration (red):", np.round(final_centers_1[0], 3))
+print("2. Center of the second iteration:", np.round(final_centers_2[1], 3))
+print("3. Center of the third iteration when clustering converges:", np.round(final_centers_3[2], 3))
+print("4. Number of iterations for convergence:", iterations_3)
