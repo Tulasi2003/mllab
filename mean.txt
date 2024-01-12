@@ -1,0 +1,60 @@
+l = [1,2,3,4,5,4,4,3,3,3]
+def mean(l):
+  mean=sum(l)/len(l)
+  return mean
+mean(l)
+
+l.sort()
+
+n=len(l)
+
+if  n% 2 == 0:
+    median1 = l[n//2]
+    median2 = l[n//2 - 1]
+    median = (median1 + median2)/2
+else:
+    median = l[n//2]
+print("Median is: " + str(median))
+
+d ={}
+for i in l:
+  if i in d:
+    d[i] = d[i] + 1
+  else:
+    d[i]=1
+
+max = 0
+for i in d:
+  if d[i]>max:
+    max = d[i]
+    ans =i
+print(ans)
+
+def var(l):
+  x = mean(l)
+  sum=0
+  for i in l:
+    sum += (i - x) ** 2
+  return sum/len(l)
+var(l)
+
+def sd(l):
+  temp = var(l)
+  return temp ** 0.5
+sd(l)
+
+
+min = l[0]
+max = l[0]
+for i in l:
+  if min > i:
+    min =i
+  elif max < i:
+    max =i
+for i in l:
+  print((i - min)/(max - min))
+
+def std(l):
+  for i in l:
+    print((i - mean(l))/sd(l))
+std(l)

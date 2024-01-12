@@ -1,0 +1,44 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+ft=pd.read_csv("/home/ignis/Desktop/foodtruck.csv")
+ft.head()
+X=ft['a']
+Y=ft['b']
+plt.scatter(X,Y)
+plt.show()
+mean_a=sum(X)/len(X)
+mean_b=sum(Y)/len(Y)
+print(mean_a)
+print(mean_b)
+sm=0
+den=0
+for i in range(len(X)):
+    sm+=(X[i]-mean_a)*(Y[i]-mean_b)
+    den+=(X[i]-mean_a)**2
+m=sm/den
+print(m)
+c=mean_b-m*mean_a
+print(c)
+line=[m*i+c for i in X]
+plt.plot(X,line,label="line fit",color="r")
+plt.scatter(X,Y,label="points")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.grid(True)
+plt.show()
+print(line)
+line=np.array(line)
+nm=line.mean()
+
+SSR=0
+SST=0
+for i in line:
+    SSR+=(i-nm)**2
+SSR
+for i in Y:
+    SST+=(i-mean_b)**2
+SST
+r=SSR/SST
+r
